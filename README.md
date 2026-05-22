@@ -1,16 +1,32 @@
-# React + Vite
+Data Manager UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Початковий прототип графічного інтерфейсу користувача для системи керування даними.
 
-Currently, two official plugins are available:
+Опис
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Даний проєкт є базовою реалізацією інтерфейсу системи керування даними, розробленою в рамках командної роботи.
 
-## React Compiler
+На поточному етапі реалізовано:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+базову структуру інтерфейсу;
+перемикання типів даних;
+область пошуку;
+область відображення даних;
+тестову таблицю даних;
+компонентну структуру React-застосунку.
 
-## Expanding the ESLint configuration
+Використані технології
+React
+Vite
+Tailwind CSS
+JavaScript
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Поточний стан проєкту
+
+На даний момент це початковий варіант інтерфейсу, який використовується для демонстрації загальної структури майбутньої системи.
+
+Очікується подальша інтеграція функціональних модулів від інших учасників команди, зокрема:
+
+модуля роботи з реляційними даними;
+модуля роботи з документоорієнтованими даними;
+модуля роботи з файловою системою;
