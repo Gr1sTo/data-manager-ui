@@ -1,6 +1,6 @@
 import { ui } from "../styles/ui";
 
-export default function SearchBar() {
+export default function SearchBar({ searchQuery, setSearchQuery }) {
   return (
     <div className={ui.search.outer}>
       <div className={ui.search.panel}>
@@ -8,12 +8,20 @@ export default function SearchBar() {
           <div className="flex-1">
             <div className={ui.search.inputWrap}>
               <span className={ui.search.icon}>🔍</span>
+
               <input
                 className={ui.search.input}
-                placeholder="Пошук по назві, типу, статусу або даті..."
-                readOnly
+                placeholder="Пошук по даних..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
-              <button className={ui.button.subtle}>Очистити</button>
+
+              <button
+                className={ui.button.subtle}
+                onClick={() => setSearchQuery("")}
+              >
+                Очистити
+              </button>
             </div>
           </div>
 

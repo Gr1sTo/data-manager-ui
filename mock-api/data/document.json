@@ -1,0 +1,22 @@
+[
+  {
+    "id": "doc-001",
+    "device": "SmartMeter-01",
+    "timestamp": "2026-09-20T18:30:00",
+    "measurements": {
+      "voltage": 230.4,
+      "current": 5.2,
+      "power": 1198.08
+    }
+  },
+  {
+    "id": "doc-002",
+    "device": "SmartMeter-02",
+    "timestamp": "2026-09-20T18:35:00",
+    "measurements": {
+      "voltage": 228.7,
+      "current": 4.8,
+      "power": 1097.76
+    }
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "device": "SmartMeter-01",
+    "voltage": 230.4,
+    "current": 5.2,
+    "power": 1198.08
+  },
+  {
+    "id": 2,
+    "device": "SmartMeter-02",
+    "voltage": 228.7,
+    "current": 4.8,
+    "power": 1097.76
+  },
+  {
+    "id": 3,
+    "device": "SmartMeter-03",
+    "voltage": 231.1,
+    "current": 6.1,
+    "power": 1409.71
+  }
+]

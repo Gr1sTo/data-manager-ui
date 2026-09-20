@@ -8,6 +8,10 @@ export default function DataTypeDropdown({
   options,
   dropdownRef,
 }) {
+  const selectedOption = options.find(
+    (item) => item.value === dataType
+  );
+
   return (
     <div ref={dropdownRef} className={ui.dropdown.wrapper}>
       <label className={ui.text.label}>Тип даних</label>
@@ -16,7 +20,7 @@ export default function DataTypeDropdown({
         onClick={() => setIsOpen(!isOpen)}
         className={ui.dropdown.trigger}
       >
-        {dataType}
+        {selectedOption?.label}
         <span className={ui.dropdown.chevron}>▾</span>
       </button>
 
@@ -24,14 +28,14 @@ export default function DataTypeDropdown({
         <div className={ui.dropdown.menu}>
           {options.map((item) => (
             <button
-              key={item}
+              key={item.value}
               onClick={() => {
-                setDataType(item);
+                setDataType(item.value);
                 setIsOpen(false);
               }}
               className={ui.dropdown.menuItem}
             >
-              {item}
+              {item.label}
             </button>
           ))}
         </div>

@@ -4,16 +4,49 @@ import UserMenu from "./components/UserMenu";
 import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import StatsCards from "./components/StatsCards";
-import { dataTypeOptions, tableRows } from "./data/mockData";
+import { dataTypeOptions } from "./data/mockData";
 import { ui } from "./styles/ui";
+import { getDataByType } from "./api/dataApi";
 
 export default function App() {
-  const [dataType, setDataType] = useState("Реляційні дані");
+  const [dataType, setDataType] = useState("relational");
+  const currentDataTypeLabel =
+  dataTypeOptions.find((item) => item.value === dataType)?.label ?? dataType;
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isDataMenuOpen, setIsDataMenuOpen] = useState(false);
 
   const userMenuRef = useRef(null);
   const dataMenuRef = useRef(null);
+
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredData = data.filter((row) =>
+  Object.values(row).some((value) =>
+    String(value).toLowerCase().includes(searchQuery.toLowerCase())
+  )
+);
+
+  useEffect(() => {
+    async function loadData() {
+      const apiType = dataType;
+
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await getDataByType(apiType);
+        setData(result);
+      } catch (error) {
+        console.error(error);
+        setError("Не вдалося завантажити дані");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadData();
+  }, [dataType]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -34,6 +67,7 @@ export default function App() {
   }, []);
 
   return (
+    
     <div className={ui.layout.page}>
       <div className={ui.layout.appShell}>
         <header className={ui.layout.header}>
@@ -65,7 +99,10 @@ export default function App() {
           </div>
         </header>
 
-        <SearchBar />
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
 
         <main className={ui.layout.section}>
           <div className={ui.layout.contentPanel}>
@@ -89,12 +126,26 @@ export default function App() {
             <div className={ui.misc.currentModeRow}>
               <div className={ui.text.infoText}>
                 Поточний режим:{" "}
-                <span className={ui.text.infoStrong}>{dataType}</span>
+                <span className={ui.text.infoStrong}>{currentDataTypeLabel}</span>
               </div>
             </div>
 
-            <DataTable rows={tableRows} />
-            <StatsCards dataType={dataType} />
+            {isLoading && (
+              <div className={ui.text.muted}>
+                Завантаження даних...
+              </div>
+            )}
+
+            {error && (
+              <div className={ui.text.muted}>
+                {error}
+              </div>
+            )}
+
+            {!isLoading && !error && (
+              <DataTable rows={filteredData} />
+            )}
+            <StatsCards dataType={currentDataTypeLabel} />
           </div>
         </main>
       </div>

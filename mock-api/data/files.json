@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Reports",
+    "type": "folder"
+  },
+  {
+    "id": 2,
+    "name": "Measurements",
+    "type": "folder"
+  },
+  {
+    "id": 3,
+    "name": "monthly-report.pdf",
+    "type": "file",
+    "extension": "pdf",
+    "size": 245760
+  },
+  {
+    "id": 4,
+    "name": "sensor-data.csv",
+    "type": "file",
+    "extension": "csv",
+    "size": 53248
+  }
+]
