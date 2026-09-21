@@ -11,3 +11,31 @@ export async function getRelationalData() {
 
   return response.json();
 }
+
+export async function updateRelationalData(id, updatedData) {
+  const response = await fetch(`${BASE_URL}/data/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Не вдалося оновити реляційні дані");
+  }
+
+  return response.json();
+}
+
+export async function deleteRelationalData(id) {
+  const response = await fetch(`${BASE_URL}/data/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Не вдалося видалити реляційні дані");
+  }
+
+  return response.json();
+}

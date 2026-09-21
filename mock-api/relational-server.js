@@ -22,6 +22,63 @@ app.get("/data", (req, res) => {
   res.json(relationalData);
 });
 
+app.put("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const relationalData = JSON.parse(rawData);
+
+  const id = Number(req.params.id);
+  const updatedRow = req.body;
+
+  const index = relationalData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Запис не знайдено",
+    });
+  }
+
+  relationalData[index] = {
+    ...relationalData[index],
+    ...updatedRow,
+    id,
+  };
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(relationalData, null, 2),
+    "utf-8"
+  );
+
+  res.json(relationalData[index]);
+});
+
+app.delete("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const relationalData = JSON.parse(rawData);
+
+  const id = Number(req.params.id);
+
+  const index = relationalData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Запис не знайдено",
+    });
+  }
+
+  const deletedRow = relationalData[index];
+
+  relationalData.splice(index, 1);
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(relationalData, null, 2),
+    "utf-8"
+  );
+
+  res.json(deletedRow);
+});
+
 app.listen(PORT, () => {
   console.log(`Relational API запущено: http://localhost:${PORT}`);
 });

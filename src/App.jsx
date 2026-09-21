@@ -4,9 +4,12 @@ import UserMenu from "./components/UserMenu";
 import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import StatsCards from "./components/StatsCards";
+import ViewModal from "./components/ViewModal";
+import EditModal from "./components/EditModal";
 import { dataTypeOptions } from "./data/mockData";
 import { ui } from "./styles/ui";
-import { getDataByType } from "./api/dataApi";
+import { getDataByType, updateDataByType, deleteDataByType, } from "./api/dataApi";
+import DeleteModal from "./components/DeleteModal";
 
 export default function App() {
   const [dataType, setDataType] = useState("relational");
@@ -28,6 +31,10 @@ export default function App() {
   )
 );
 
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [editingRow, setEditingRow] = useState(null);
+  const [deletingRow, setDeletingRow] = useState(null);
+  console.log("Editing row:", editingRow);
   useEffect(() => {
     async function loadData() {
       const apiType = dataType;
@@ -65,6 +72,10 @@ export default function App() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+
+  console.log("Deleting row:", deletingRow);
+
 
   return (
     
@@ -116,11 +127,6 @@ export default function App() {
                   об’єкти залежно від обраного режиму
                 </p>
               </div>
-
-              <div className={ui.misc.controls}>
-                <button className={ui.button.small}>Таблиця</button>
-                <button className={ui.button.small}>Картки</button>
-              </div>
             </div>
 
             <div className={ui.misc.currentModeRow}>
@@ -129,6 +135,57 @@ export default function App() {
                 <span className={ui.text.infoStrong}>{currentDataTypeLabel}</span>
               </div>
             </div>
+
+            <ViewModal
+              row={selectedRow}
+              onClose={() => setSelectedRow(null)}
+            />
+
+            {editingRow && (
+              <EditModal
+                row={editingRow}
+                onClose={() => setEditingRow(null)}
+                onSave={async (updatedRow) => {
+                  try {
+                    const savedRow = await updateDataByType(
+                      dataType,
+                      updatedRow.id,
+                      updatedRow
+                    );
+
+                    setData((currentData) =>
+                      currentData.map((row) =>
+                        row.id === savedRow.id ? savedRow : row
+                      )
+                    );
+
+                    setEditingRow(null);
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
+              />
+            )}
+
+            {deletingRow && (
+              <DeleteModal
+                row={deletingRow}
+                onClose={() => setDeletingRow(null)}
+                onConfirm={async (row) => {
+                  try {
+                    await deleteDataByType(dataType, row.id);
+
+                    setData((currentData) =>
+                      currentData.filter((item) => item.id !== row.id)
+                    );
+
+                    setDeletingRow(null);
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
+              />
+            )}
 
             {isLoading && (
               <div className={ui.text.muted}>
@@ -143,7 +200,12 @@ export default function App() {
             )}
 
             {!isLoading && !error && (
-              <DataTable rows={filteredData} />
+              <DataTable
+                rows={filteredData}
+                onView={setSelectedRow}
+                onEdit={setEditingRow}
+                onDelete={setDeletingRow}
+              />
             )}
             <StatsCards dataType={currentDataTypeLabel} />
           </div>

@@ -1,6 +1,6 @@
 import { ui } from "../styles/ui";
 
-export default function DataTable({ rows }) {
+export default function DataTable({ rows, onView, onEdit, onDelete }) {
   if (!rows || rows.length === 0) {
     return (
       <div className={ui.table.wrapper}>
@@ -61,8 +61,24 @@ export default function DataTable({ rows }) {
 
                 <td className={ui.table.td}>
                   <div className={ui.table.actions}>
-                    <button className={ui.button.tiny}>Переглянути</button>
-                    <button className={ui.button.tiny}>Редагувати</button>
+                    <button
+                      className={ui.button.tiny}
+                      onClick={() => onView(row)}
+                    >
+                      Переглянути
+                    </button>
+                    <button
+                      className={ui.button.tiny}
+                      onClick={() => onEdit(row)}
+                    >
+                      Редагувати
+                    </button>
+                    <button
+                      className={ui.button.tiny}
+                      onClick={() => onDelete(row)}
+                    >
+                      Видалити
+                    </button>
                   </div>
                 </td>
               </tr>

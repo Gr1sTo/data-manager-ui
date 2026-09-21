@@ -22,6 +22,63 @@ app.get("/data", (req, res) => {
   res.json(documentData);
 });
 
+app.put("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const documentData = JSON.parse(rawData);
+
+  const id = req.params.id;
+  const updatedRow = req.body;
+
+  const index = documentData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Документ не знайдено",
+    });
+  }
+
+  documentData[index] = {
+    ...documentData[index],
+    ...updatedRow,
+    id,
+  };
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(documentData, null, 2),
+    "utf-8"
+  );
+
+  res.json(documentData[index]);
+});
+
+app.delete("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const documentData = JSON.parse(rawData);
+
+  const id = req.params.id;
+
+  const index = documentData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Документ не знайдено",
+    });
+  }
+
+  const deletedRow = documentData[index];
+
+  documentData.splice(index, 1);
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(documentData, null, 2),
+    "utf-8"
+  );
+
+  res.json(deletedRow);
+});
+
 app.listen(PORT, () => {
   console.log(`Document API запущено: http://localhost:${PORT}`);
 });

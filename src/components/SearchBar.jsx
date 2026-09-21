@@ -24,11 +24,6 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
               </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button className={ui.button.primary}>Додати</button>
-            <button className={ui.button.secondary}>Фільтр</button>
-          </div>
         </div>
       </div>
     </div>

@@ -22,6 +22,63 @@ app.get("/data", (req, res) => {
   res.json(fileData);
 });
 
+app.put("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const fileData = JSON.parse(rawData);
+
+  const id = Number(req.params.id);
+  const updatedRow = req.body;
+
+  const index = fileData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Файл або папку не знайдено",
+    });
+  }
+
+  fileData[index] = {
+    ...fileData[index],
+    ...updatedRow,
+    id,
+  };
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(fileData, null, 2),
+    "utf-8"
+  );
+
+  res.json(fileData[index]);
+});
+
+app.delete("/data/:id", (req, res) => {
+  const rawData = fs.readFileSync(dataPath, "utf-8");
+  const fileData = JSON.parse(rawData);
+
+  const id = Number(req.params.id);
+
+  const index = fileData.findIndex((row) => row.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Файл або папку не знайдено",
+    });
+  }
+
+  const deletedRow = fileData[index];
+
+  fileData.splice(index, 1);
+
+  fs.writeFileSync(
+    dataPath,
+    JSON.stringify(fileData, null, 2),
+    "utf-8"
+  );
+
+  res.json(deletedRow);
+});
+
 app.listen(PORT, () => {
   console.log(`File API запущено: http://localhost:${PORT}`);
 });
