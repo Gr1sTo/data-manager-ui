@@ -71,24 +71,25 @@ export const ui = {
       "rounded-xl bg-neutral-100 px-3 py-1 text-xs text-neutral-500 transition hover:bg-neutral-200",
   },
 
-  table: {
+    table: {
     wrapper:
       "overflow-hidden rounded-[22px] border border-neutral-200 bg-white shadow-sm",
     scroll: "overflow-x-auto",
-    table: "min-w-full text-left text-sm",
+    table: "w-full min-w-max text-left text-sm",
     thead: "bg-neutral-100 text-neutral-600",
-    th: "px-5 py-4 font-semibold",
+    th: "whitespace-nowrap px-5 py-4 font-semibold",
     tr: "border-t border-neutral-100 transition hover:bg-neutral-50",
-    td: "px-5 py-4",
-    tdMuted: "px-5 py-4 text-neutral-500",
-    tdStrong: "px-5 py-4 font-medium",
+    td: "max-w-[280px] truncate px-5 py-4",
+    tdMuted: "max-w-[280px] truncate px-5 py-4 text-neutral-500",
+    tdStrong: "whitespace-nowrap px-5 py-4 font-medium",
+    tdActions: "whitespace-nowrap px-5 py-4",
     badge:
       "rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700",
-    actions: "flex gap-2",
+    actions: "flex whitespace-nowrap gap-2",
   },
 
   cards: {
-    grid: "mt-5 grid gap-4 md:grid-cols-3",
+    grid: "mt-5 grid gap-4 md:grid-cols-2",
     card: "rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm",
     label: "text-sm text-neutral-500",
     value: "mt-1 text-lg font-semibold",

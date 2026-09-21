@@ -10,7 +10,8 @@ export default function ViewModal({ row, onClose }) {
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
         onClick={onClose}
     >
-      <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl"
+      <div
+        className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl bg-white p-6 shadow-xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
@@ -24,7 +25,7 @@ export default function ViewModal({ row, onClose }) {
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2">
           {Object.entries(row).map(([key, value]) => (
             <div
               key={key}

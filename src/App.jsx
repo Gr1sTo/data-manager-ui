@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import DataTypeDropdown from "./components/DataTypeDropdown";
-import UserMenu from "./components/UserMenu";
 import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import StatsCards from "./components/StatsCards";
@@ -15,10 +14,8 @@ export default function App() {
   const [dataType, setDataType] = useState("relational");
   const currentDataTypeLabel =
   dataTypeOptions.find((item) => item.value === dataType)?.label ?? dataType;
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isDataMenuOpen, setIsDataMenuOpen] = useState(false);
 
-  const userMenuRef = useRef(null);
   const dataMenuRef = useRef(null);
 
   const [data, setData] = useState([]);
@@ -57,10 +54,6 @@ export default function App() {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false);
-      }
-
       if (dataMenuRef.current && !dataMenuRef.current.contains(event.target)) {
         setIsDataMenuOpen(false);
       }
@@ -97,14 +90,6 @@ export default function App() {
                 setDataType={setDataType}
                 options={dataTypeOptions}
                 dropdownRef={dataMenuRef}
-              />
-
-              <UserMenu
-                isOpen={isUserMenuOpen}
-                setIsOpen={setIsUserMenuOpen}
-                menuRef={userMenuRef}
-                userName="Nazary"
-                role="Адміністратор"
               />
             </div>
           </div>
@@ -201,13 +186,16 @@ export default function App() {
 
             {!isLoading && !error && (
               <DataTable
+                key={`${dataType}-${searchQuery}`}
                 rows={filteredData}
                 onView={setSelectedRow}
                 onEdit={setEditingRow}
                 onDelete={setDeletingRow}
               />
             )}
-            <StatsCards dataType={currentDataTypeLabel} />
+            <StatsCards dataType={currentDataTypeLabel}
+              recordsCount={filteredData.length} 
+            />
           </div>
         </main>
       </div>

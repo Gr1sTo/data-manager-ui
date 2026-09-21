@@ -25,10 +25,10 @@ export default function EditModal({ row, onClose, onSave }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
       onClick={onClose}
     >
-      <div
-        className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl"
-        onClick={(event) => event.stopPropagation()}
-      >
+        <div
+            className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+        >
         <div className="mb-4 flex items-center justify-between">
           <h3 className={ui.text.sectionTitle}>Редагування запису</h3>
 
@@ -40,27 +40,29 @@ export default function EditModal({ row, onClose, onSave }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {Object.entries(formData).map(([key, value]) => (
-            <div key={key}>
-              <label className={ui.text.label}>
-                {key}
-              </label>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
+                {Object.entries(formData).map(([key, value]) => (
+                    <div key={key}>
+                    <label className={ui.text.label}>
+                        {key}
+                    </label>
 
-              <input
-                className="mt-1 w-full rounded-lg border px-3 py-2"
-                value={
-                  value !== null && typeof value === "object"
-                    ? JSON.stringify(value)
-                    : value ?? ""
-                }
-                disabled={key === "id"}
-                onChange={(event) =>
-                  handleChange(key, event.target.value)
-                }
-              />
+                    <input
+                        className="mt-1 w-full rounded-lg border px-3 py-2"
+                        value={
+                        value !== null && typeof value === "object"
+                            ? JSON.stringify(value)
+                            : value ?? ""
+                        }
+                        disabled={key === "id"}
+                        onChange={(event) =>
+                        handleChange(key, event.target.value)
+                        }
+                    />
+                    </div>
+                ))}
             </div>
-          ))}
 
           <div className="flex justify-end gap-2 pt-2">
             <button
