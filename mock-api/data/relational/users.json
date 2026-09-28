@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "full_name": "Адміністратор системи",
+    "email": "admin@smartenergy.local",
+    "role": "admin",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "username": "researcher01",
+    "full_name": "Іван Петренко",
+    "email": "petrenko@smartenergy.local",
+    "role": "researcher",
+    "status": "active"
+  }
+]

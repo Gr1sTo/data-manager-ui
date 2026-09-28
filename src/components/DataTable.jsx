@@ -1,20 +1,27 @@
 import { ui } from "../styles/ui";
 import { useState } from "react";
 
-export default function DataTable({ rows, onView, onEdit, onDelete }) {
-
+export default function DataTable({
+  rows,
+  onView,
+  onEdit,
+  onDelete,
+  viewLabel = "Переглянути",
+}) {
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "asc",
   });
-  
+
   if (!rows || rows.length === 0) {
     return (
       <div className={ui.table.wrapper}>
         <div className={ui.table.scroll}>
-          <div className={ui.table.tdMuted}>Немає даних для відображення</div>
+          <div className={ui.table.tdMuted}>
+            Немає даних для відображення
+          </div>
         </div>
       </div>
     );
@@ -22,7 +29,15 @@ export default function DataTable({ rows, onView, onEdit, onDelete }) {
 
   const rowsPerPage = 10;
 
-  const totalPages = Math.ceil(rows.length / rowsPerPage);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(rows.length / rowsPerPage)
+  );
+
+  const safeCurrentPage = Math.min(
+    currentPage,
+    totalPages
+  );
 
   function handleSort(column) {
     setSortConfig((current) => {
@@ -81,7 +96,7 @@ export default function DataTable({ rows, onView, onEdit, onDelete }) {
       : -comparison;
   });
 
-  const startIndex = (currentPage - 1) * rowsPerPage;
+  const startIndex = (safeCurrentPage - 1) * rowsPerPage;
 
   const currentRows = sortedRows.slice(
     startIndex,
@@ -89,9 +104,7 @@ export default function DataTable({ rows, onView, onEdit, onDelete }) {
   );
 
   const columns = [
-    ...new Set(
-      rows.flatMap((row) => Object.keys(row))
-    ),
+    ...new Set(rows.flatMap((row) => Object.keys(row))),
   ];
 
   const renderValue = (value) => {
@@ -105,6 +118,8 @@ export default function DataTable({ rows, onView, onEdit, onDelete }) {
 
     return String(value);
   };
+
+  const hasActions = onView || onEdit || onDelete;
 
   return (
     <div className={ui.table.wrapper}>
@@ -130,72 +145,93 @@ export default function DataTable({ rows, onView, onEdit, onDelete }) {
                 </th>
               ))}
 
-              <th className={ui.table.th}>Дії</th>
+              {hasActions && (
+                <th className={ui.table.th}>Дії</th>
+              )}
             </tr>
           </thead>
 
           <tbody>
             {currentRows.map((row, index) => (
-              <tr key={row.id ?? index} className={ui.table.tr}>
+              <tr key={row.id ?? row.name ?? index} className={ui.table.tr}>
                 {columns.map((column) => (
                   <td
                     key={column}
                     className={
-                      column === "id" ? ui.table.tdStrong : ui.table.td
+                      column === "id"
+                        ? ui.table.tdStrong
+                        : ui.table.td
                     }
                   >
                     {renderValue(row[column])}
                   </td>
                 ))}
 
-                <td className={ui.table.tdActions}>
-                  <div className={ui.table.actions}>
-                    <button
-                      className={ui.button.tiny}
-                      onClick={() => onView(row)}
-                    >
-                      Переглянути
-                    </button>
-                    <button
-                      className={ui.button.tiny}
-                      onClick={() => onEdit(row)}
-                    >
-                      Редагувати
-                    </button>
-                    <button
-                      className={ui.button.tiny}
-                      onClick={() => onDelete(row)}
-                    >
-                      Видалити
-                    </button>
-                  </div>
-                </td>
+                {hasActions && (
+                  <td className={ui.table.tdActions}>
+                    <div className={ui.table.actions}>
+                      {onView && (
+                        <button
+                          className={ui.button.tiny}
+                          onClick={() => onView(row)}
+                        >
+                          {viewLabel}
+                        </button>
+                      )}
+
+                      {onEdit && (
+                        <button
+                          className={ui.button.tiny}
+                          onClick={() => onEdit(row)}
+                        >
+                          Редагувати
+                        </button>
+                      )}
+
+                      {onDelete && (
+                        <button
+                          className={ui.button.tiny}
+                          onClick={() => onDelete(row)}
+                        >
+                          Видалити
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
       <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-4">
-          <button
-            className={ui.button.small}
-            onClick={() => setCurrentPage((page) => page - 1)}
-            disabled={currentPage === 1}
-          >
-            Назад
-          </button>
+        <button
+          className={ui.button.small}
+          onClick={() =>
+            setCurrentPage((page) => Math.max(1, page - 1))
+          }
+          disabled={safeCurrentPage === 1}
+        >
+          Назад
+        </button>
 
-          <div className="text-sm text-neutral-600">
-            Сторінка {currentPage} з {totalPages}
-          </div>
-
-          <button
-            className={ui.button.small}
-            onClick={() => setCurrentPage((page) => page + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Далі
-          </button>
+        <div className="text-sm text-neutral-600">
+          Сторінка {safeCurrentPage} з {totalPages}
         </div>
+
+        <button
+          className={ui.button.small}
+          onClick={() =>
+            setCurrentPage((page) =>
+              Math.min(totalPages, page + 1)
+            )
+          }
+          disabled={safeCurrentPage === totalPages}
+        >
+          Далі
+        </button>
+      </div>
     </div>
   );
 }

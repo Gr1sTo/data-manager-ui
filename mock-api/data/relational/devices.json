@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "SmartMeter-01",
+    "type": "smart_meter",
+    "location": "Building A",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "name": "Inverter-01",
+    "type": "solar_inverter",
+    "location": "Solar Station 1",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "name": "Battery-01",
+    "type": "battery_storage",
+    "location": "Battery Room",
+    "status": "maintenance"
+  }
+]

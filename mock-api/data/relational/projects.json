@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "SmartEnergy Lab",
+    "description": "Лабораторний комплекс SmartEnergy",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "name": "Microgrid Research",
+    "description": "Дослідження мікромережі",
+    "status": "active"
+  }
+]
